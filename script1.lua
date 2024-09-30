@@ -1,5 +1,5 @@
 local EasyUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/RiCIcom/easyrobloxui/refs/heads/main/main.lua"))()
-local uselog = true
+
 -- Wenn das GUI bereits existiert, entfernen wir es
 if game.CoreGui:FindFirstChild("RemoteSpyUI") then
     game.CoreGui.RemoteSpyUI:Destroy()
@@ -181,4 +181,3 @@ local function startLoadingScreen()
 end
 
 startLoadingScreen()
-EasyUI:printer(uselog)
