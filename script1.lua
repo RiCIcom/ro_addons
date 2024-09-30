@@ -1,5 +1,5 @@
 local EasyUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/RiCIcom/easyrobloxui/refs/heads/main/main.lua"))()
-
+local uselog = true
 -- Wenn das GUI bereits existiert, entfernen wir es
 if game.CoreGui:FindFirstChild("RemoteSpyUI") then
     game.CoreGui.RemoteSpyUI:Destroy()
@@ -16,7 +16,6 @@ local function toggleUI()
     isUIVisible = not isUIVisible
     screenGui.Enabled = isUIVisible
 end
-local uselog = true
 
 game:GetService("UserInputService").InputBegan:Connect(function(input)
     if input.KeyCode == Enum.KeyCode.Period then
