@@ -1,6 +1,6 @@
 local EasyUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/RiCIcom/easyrobloxui/refs/heads/main/main.lua"))()
-print("WUTSC")
 
+local log = true
 local screenGui = EasyUI:ScreenGui()
 
 local detectedRemotes = {}
@@ -71,7 +71,6 @@ local function openRemoteSpy()
     EasyUI:UIStroke(listFrame, 2, Color3.fromRGB(0, 0, 0))
     EasyUI:UIListLayout(listFrame, 10)
 
-    -- Rechte Seite für den Editor
     local editorFrame = EasyUI:Frame(spyFrame, UDim2.new(0.55, -20, 0.75, -20), UDim2.new(0.45, 10, 0.25, 10), Color3.fromRGB(40, 40, 40))
     EasyUI:UICorner(editorFrame, UDim.new(0, 15))
     EasyUI:UIStroke(editorFrame, 3, Color3.fromRGB(0, 0, 0))
@@ -91,14 +90,11 @@ local function openRemoteSpy()
         end
         detectedRemotes[remote] = true
 
-        -- Button für den Remote Event erstellen
         local remoteButton = EasyUI:TextButton(listFrame, remote.Name, UDim2.new(0.9, 0, 0, 40), nil, Color3.fromRGB(90, 90, 90))
         EasyUI:UICorner(remoteButton, UDim.new(0, 6))
         EasyUI:MakeClickable(remoteButton, function()
             local argsText = "-- Argumente für das Remote Event '" .. remote.Name .. "'\n"
             argsText = argsText .. "Class: " .. remote.ClassName .. "\n"
-
-            argsText = argsText .. "\n-- Beispielargumente:\nArgument 1: Beispielwert 1\nArgument 2: Beispielwert 2"
             codeDisplay.Text = argsText
         end)
     end
@@ -156,3 +152,4 @@ local function startLoadingScreen()
 end
 
 startLoadingScreen()
+printer(log)
