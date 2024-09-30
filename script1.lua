@@ -151,5 +151,5 @@ local function startLoadingScreen()
     simulateLoading()
 end
 
-startLoadingScreen()
 printer(log)
+startLoadingScreen()
