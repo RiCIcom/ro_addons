@@ -18,8 +18,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
 end)
 
 local function openRemoteSpy()
-    print("openRemoteSpy() aufgerufen")
-
     local spyFrame = EasyUI:Frame(screenGui, UDim2.new(0.6, 0, 0.6, 0), UDim2.new(0.2, 0, 0.2, 0), Color3.fromRGB(30, 30, 30))
     EasyUI:UICorner(spyFrame, UDim.new(0, 20))
     EasyUI:ApplyShadow(spyFrame)
@@ -93,8 +91,29 @@ local function openRemoteSpy()
         local remoteButton = EasyUI:TextButton(listFrame, remote.Name, UDim2.new(0.9, 0, 0, 40), nil, Color3.fromRGB(90, 90, 90))
         EasyUI:UICorner(remoteButton, UDim.new(0, 6))
         EasyUI:MakeClickable(remoteButton, function()
-            local argsText = "-- Argumente für das Remote Event '" .. remote.Name .. "'\n"
-            argsText = argsText .. "Class: " .. remote.ClassName .. "\n"
+            local argsText = "Details über das Remote Event '" .. remote.Name .. "'\n"
+            argsText = argsText .. "Klassentyp: " .. remote.ClassName .. "\n"
+            argsText = argsText .. "Pfad: " .. remote:GetFullName() .. "\n"
+
+            local testArgs = {}
+            if remote:IsA("RemoteEvent") then
+                local success, response = pcall(function()
+                    remote:FireServer(table.unpack(testArgs))
+                end)
+                if not success then
+                    argsText = argsText .. "Argumente können nicht simuliert werden.\n"
+                end
+            elseif remote:IsA("RemoteFunction") then
+                local success, response = pcall(function()
+                    remote:InvokeServer(table.unpack(testArgs))
+                end)
+                if success then
+                    argsText = argsText .. "Antwort von Server: " .. tostring(response) .. "\n"
+                else
+                    argsText = argsText .. "Fehler bei der Anfrage: " .. response .. "\n"
+                end
+            end
+
             codeDisplay.Text = argsText
         end)
     end
@@ -151,5 +170,4 @@ local function startLoadingScreen()
     simulateLoading()
 end
 
-printer(log)
 startLoadingScreen()
