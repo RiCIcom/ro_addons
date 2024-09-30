@@ -16,6 +16,7 @@ local function toggleUI()
     isUIVisible = not isUIVisible
     screenGui.Enabled = isUIVisible
 end
+local uselog = true
 
 game:GetService("UserInputService").InputBegan:Connect(function(input)
     if input.KeyCode == Enum.KeyCode.Period then
@@ -181,3 +182,4 @@ local function startLoadingScreen()
 end
 
 startLoadingScreen()
+EasyUI:printer(uselog)
