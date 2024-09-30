@@ -1,4 +1,5 @@
 local EasyUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/RiCIcom/easyrobloxui/refs/heads/main/main.lua"))()
+print("WUTSC")
 
 local screenGui = EasyUI:ScreenGui()
 
