@@ -56,27 +56,17 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local function requestGamePassData()
-    local remoteEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("RequestData")
-    remoteEvent:FireServer()  -- Fordert Daten vom Server an
+function hasGamePass(player, gamePassId)
+    return true  -- Simuliert, dass jeder GamePass besitzt wird
 end
 
--- Manipuliere die Reaktion, um alle GamePass-Vorteile zu simulieren
-local function spoofGamePassData()
-    local remoteFunction = ReplicatedStorage:WaitForChild("RemoteFunctions"):FindFirstChild("GetGamePassData")
-    if remoteFunction then
-        local spoofedData = {} -- Erstelle eine Tabelle mit allen Vorteilen
-        for i = 1, 10 do  -- Angenommen, es gibt 10 verschiedene Vorteile
-            spoofedData[i] = true
-        end
-        remoteFunction.OnClientInvoke = function()
-            return spoofedData  -- Hiermit werden alle Vorteile simuliert
-        end
-    end
+-- Beispiel für die Anwendung: Überprüfe, ob ein Spieler einen GamePass hat
+if hasGamePass(LocalPlayer, 663031922) then
+    print("Player besitzt den GamePass!")
+    -- Führe die Funktionen aus, die dem Spieler Vorteile geben
 end
 
-requestGamePassData()
-spoofGamePassData()
+hasGamePass()
 
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
