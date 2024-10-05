@@ -29,7 +29,7 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
-local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
+local MarketplaceService = game:GetService("MarketplaceService")
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
@@ -48,9 +48,9 @@ local function createmessage(title, text, icon)
     })
 end
 
-function MarketplaceService:UserOwnsGamePassAsync(userId, gamePassId)
-    -- Hier kannst du eine Bedingung einbauen, ob du das generell tun möchtest oder für bestimmte Gamepasses
-    print("Überschreibe UserOwnsGamePassAsync für Gamepass-ID:", gamePassId)
+local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
+function MarketplaceService:UserOwnsGamePassAsync(player, gamePassId)
+    -- Gib immer "true" zurück, damit alle Gamepässe freigeschaltet sind
     return true
 end
 -------------STARTUP-----------------
