@@ -547,15 +547,6 @@ local function toggleFly()
     end
 end
 
-FlyButton.MouseButton1Click:Connect(toggleFly)
-    FlySpeedTextBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            adjustFlySpeed()
-        else
-            FlySpeedTextBox.Text = "Enter Fly Speed (5 - 400)"
-        end
-    end)
-
 function adjustFlySpeed()
     local inputSpeed = tonumber(FlySpeedTextBox.Text)
     if inputSpeed and inputSpeed >= 5 and inputSpeed <= 400 then
@@ -566,6 +557,15 @@ function adjustFlySpeed()
         print("Ungültige Eingabe. Fluggeschwindigkeit bleibt bei:", FlySpeed)
     end
 end
+
+FlyButton.MouseButton1Click:Connect(toggleFly)
+    FlySpeedTextBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            adjustFlySpeed()
+        else
+            FlySpeedTextBox.Text = "Enter Fly Speed (5 - 400)"
+        end
+    end)
 
 -------------SPEEDFIRE
 local function toggleSpeedfire()
