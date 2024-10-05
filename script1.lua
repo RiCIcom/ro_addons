@@ -55,6 +55,18 @@ local TweenService = game:GetService("TweenService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 
+local gamePassID = 663031922
+
+    MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
+        if ownsPass then
+            print("Player owns the GamePass!")
+        else
+            print("Player does not own the GamePass.")
+        end
+    end):catch(function(error)
+        warn("An error occurred: " .. tostring(error))
+    end)
+
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
     local oahwamdkwjha = "REINJECTING! PLEASE WAIT"
@@ -76,17 +88,6 @@ local function injector()
     createmessage(extendedname, "Please Wait 5 Seconds, it inject automatically")
     wait(5)
 end
-local gamePassID = 663031922
-
-    MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
-        if ownsPass then
-            print("Player owns the GamePass!")
-        else
-            print("Player does not own the GamePass.")
-        end
-    end):catch(function(error)
-        warn("An error occurred: " .. tostring(error))
-    end)
 
 injector()
 
