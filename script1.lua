@@ -74,7 +74,8 @@ local function injector()
     createmessage(extendedname, scversion)
     createmessage(extendedname, "Please Wait 5 Seconds, it inject automatically")
     wait(5)
-    local gamePassID = 663031922
+end
+local gamePassID = 663031922
 
     MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
         if ownsPass then
@@ -85,7 +86,6 @@ local function injector()
     end):catch(function(error)
         warn("An error occurred: " .. tostring(error))
     end)
-end
 
 injector()
 
