@@ -473,6 +473,9 @@ function fadeOutUI(duration)
             tween:Play()
         end
     end
+    task.delay(duration, function()
+        ScreenGui.Enabled = false
+    end)
 end
 
 local function resetUICorners()
@@ -1079,8 +1082,8 @@ function toggleUI()
             isUIVisible = false
         end)
     else
-        resetTransparency()
         ScreenGui.Enabled = true
+        resetTransparency()
         fadeInUI(1.5)
         isUIVisible = true
     end
