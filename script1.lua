@@ -419,72 +419,44 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 ----------------------Animation Creator
-function fadeIn(element, duration)
-    local tweenInfo = TweenInfo.new(
-        duration, -- Dauer der Animation
-        Enum.EasingStyle.Quad, -- Art der Animation (weich)
-        Enum.EasingDirection.InOut -- Richtung (beidseitig sanft)
-    )
-    
-    local tweenGoal = {
-        BackgroundTransparency = 0.1,
-        TextTransparency = 0
-    }
-
-    local tween = TweenService:Create(element, tweenInfo, tweenGoal)
-    tween:Play()
-end
-
--- Fade Out Funktion
-function fadeOut(element, duration)
-    local tweenInfo = TweenInfo.new(
-        duration,
-        Enum.EasingStyle.Quad,
-        Enum.EasingDirection.InOut
-    )
-    
-    local tweenGoal = {
-        BackgroundTransparency = 1,
-        TextTransparency = 1
-    }
-
-    local tween = TweenService:Create(element, tweenInfo, tweenGoal)
-    tween:Play()
-end
-
 local function fadeInUI(duration)
     ScreenGui.Enabled = true  -- Wir stellen sicher, dass das UI aktiviert bleibt
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 0.1}  -- Passe hier die Zieltransparenz an
+            local goal = {BackgroundTransparency = 0.1}  -- Stelle sicher, dass die Transparenz wie ursprünglich gesetzt ist
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 0, BackgroundTransparency = 0.1}
+            local goal = {TextTransparency = 0, BackgroundTransparency = 0.1}  -- Konsistente Transparenz für Text- und Hintergrund
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         end
     end
 end
 
+-- Fade Out Funktion
 local function fadeOutUI(duration)
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 1}  -- Komplett transparent
+            local goal = {BackgroundTransparency = 1}  -- Komplett transparent machen
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 1, BackgroundTransparency = 1}  -- Text und Hintergrund transparent
+            local goal = {TextTransparency = 1, BackgroundTransparency = 1}  -- Text und Hintergrund transparent machen
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         end
     end
+    -- Nach der Animation das UI deaktivieren, um sicherzustellen, dass es ausgeblendet bleibt
+    delay(duration, function()
+        ScreenGui.Enabled = false
+    end)
 end
 ----------------------FUNKTIONEN-----------------------
 ------------FLY
