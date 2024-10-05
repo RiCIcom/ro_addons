@@ -1,3 +1,16 @@
+local Settings = {
+    Fly = "F",
+    ToggleESP = "U",
+    FullESP = "L",
+    ESP_RADIUS = 500,
+    ToggleUI = "K",
+    ToggleGodMode = "G",
+    ToggleUnlimitedAmmo = "H",
+    IncreaseFlySpeed = "R",
+    DecreaseFlySpeed = "T",
+    SpectatePlayer = "Y",
+    TeleportToPlayer = "P"
+}
 local Flying = false
 local FlySpeed = 50
 local FlyBodyGyro, FlyBodyVelocity
@@ -16,20 +29,6 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "EXTENDED PROGRAMMER CHEATS"
-
-local Settings = {
-    Fly = "F",
-    ToggleESP = "U",
-    FullESP = "L",
-    ESP_RADIUS = 500,
-    ToggleUI = "K",
-    ToggleGodMode = "G",
-    ToggleUnlimitedAmmo = "H",
-    IncreaseFlySpeed = "R",
-    DecreaseFlySpeed = "T",
-    SpectatePlayer = "Y",
-    TeleportToPlayer = "P"
-}
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
