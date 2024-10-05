@@ -100,10 +100,10 @@ cornerRadius.CornerRadius = UDim.new(0, 15)
 cornerRadius.Parent = MainFrame
 
 local shadow = Instance.new("Frame")
-shadow.Size = MainFrame.Size + UDim2.new(0, 10, 0, 10)
-shadow.Position = MainFrame.Position + UDim2.new(0, 5, 0, 5)
+shadow.Size = MainFrame.Size + UDim2.new(0, 15, 0, 15)
+shadow.Position = UDim2.new(0.5, -315, 0.5, -215)
 shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.9
+shadow.BackgroundTransparency = 0.85
 shadow.BorderSizePixel = 0
 shadow.ZIndex = 0
 shadow.Parent = ScreenGui
@@ -114,7 +114,8 @@ shadowCorner.Parent = shadow
 
 -- Create Title
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Size = UDim2.new(1, -60, 0, 40)  -- Platz für das Logo freihalten
+Title.Position = UDim2.new(0, 60, 0, 0)  -- Verschiebt den Titel, um Platz für das Logo zu lassen
 Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 Title.Text = "DarkPulse - NBTF System"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -126,16 +127,17 @@ local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 15)
 titleCorner.Parent = Title
 
+-- Logo hinzufügen
 local Logo = Instance.new("ImageLabel")
-Logo.Size = UDim2.new(0, 50, 0, 50)  -- Etwas größere Größe für bessere Sichtbarkeit
-Logo.Position = UDim2.new(0, 5, 0, -5)  -- Schiebe das Bild weiter nach links und nach oben
+Logo.Size = UDim2.new(0, 50, 0, 50)  -- Größe des Logos
+Logo.Position = UDim2.new(0, 5, 0, -5)  -- Das Bild wird leicht nach oben und links verschoben
 Logo.BackgroundTransparency = 1  -- Keine Hintergrundfarbe
-Logo.Image = "rbxassetid://131164521981506"  -- Ersetze 1234567890 mit deiner Asset-ID
+Logo.Image = "rbxassetid://131164521981506"  -- Verwende die tatsächliche Asset-ID deines Logos
 Logo.Parent = MainFrame
 
 -- UICorner für das Logo hinzufügen, falls gewünscht
 local logoCorner = Instance.new("UICorner")
-logoCorner.CornerRadius = UDim.new(1, 0)
+logoCorner.CornerRadius = UDim.new(1, 0)  -- Runde das Bild vollständig ab
 logoCorner.Parent = Logo
 
 -- Create Sidebar for Tabs
