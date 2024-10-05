@@ -14,7 +14,7 @@ local fastFireRate = 0.05
 local isUIVisible = true
 local godModeEnabled = false
 
-local Settings = {}
+local Settings = _G.Settings
 local scversion = "v1.444"
 local extendedname = "EXTENDED PROGRAMMER CHEATS"
 
