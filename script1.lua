@@ -29,16 +29,6 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
-local gamePassID = 663031922
-MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
-    if ownsPass then
-        print("Player owns the GamePass!")
-    else
-        print("Player does not own the GamePass.")
-    end
-end):catch(function(error)
-    warn("An error occurred: " .. tostring(error))
-end)
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
@@ -84,6 +74,17 @@ local function injector()
     createmessage(extendedname, scversion)
     createmessage(extendedname, "Please Wait 5 Seconds, it inject automatically")
     wait(5)
+    local gamePassID = 663031922
+
+    MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
+        if ownsPass then
+            print("Player owns the GamePass!")
+        else
+            print("Player does not own the GamePass.")
+        end
+    end):catch(function(error)
+        warn("An error occurred: " .. tostring(error))
+    end)
 end
 
 injector()
