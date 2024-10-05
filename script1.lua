@@ -29,8 +29,8 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
-local MarketplaceService = game:GetService("MarketplaceService")
 
+local MarketplaceService = game:GetService("MarketplaceService")
 local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
 function MarketplaceService:UserOwnsGamePassAsync(player, gamePassId)
     -- Gib immer "true" zurück, damit alle Gamepässe freigeschaltet sind
