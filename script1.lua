@@ -440,7 +440,7 @@ local function resetTransparency()
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
-            element.BackgroundTransparency = 0.1  -- Setze den gewünschten Ursprungswert
+            element.BackgroundTransparency = 0.1  -- Ursprünglicher Transparenzwert für Frames
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
             element.TextTransparency = 0
             element.BackgroundTransparency = 0.1
@@ -449,7 +449,7 @@ local function resetTransparency()
 end
 
 function fadeInUI(duration)
-    resetTransparency()  -- Transparenz sicherstellen, bevor Animation beginnt
+    resetTransparency()  -- Setzt Transparenzwerte zurück, bevor die Animation beginnt
     ScreenGui.Enabled = true
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
@@ -485,16 +485,6 @@ function fadeOutUI(duration)
     task.delay(duration, function()
         ScreenGui.Enabled = false
     end)
-end
-
-local function resetUICorners()
-    local elements = {MainFrame, shadow, TitleBar, Sidebar}
-    for _, element in ipairs(elements) do
-        if element:FindFirstChildWhichIsA("UICorner") then
-            local uicorner = element:FindFirstChildWhichIsA("UICorner")
-            uicorner.CornerRadius = UDim.new(0, 15)
-        end
-    end
 end
 ----------------------FUNKTIONEN-----------------------
 ------------FLY
