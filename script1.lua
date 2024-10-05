@@ -1062,15 +1062,21 @@ local function toggleHitboxVisibility()
     end
 end
 
-function toggleUI()
-    if isUIVisible then
-        ScreenGui.Visible = ScreenGui.Enabled == false
-    else
-        ScreenGui.Visible = ScreenGui.Visible == true
-    end
-    isUIVisible = not isUIVisible
-end
+-- function toggleUI()
+--     if isUIVisible then
+--         ScreenGui.Visible = ScreenGui.Enabled == false
+--     else
+--         ScreenGui.Visible = ScreenGui.Visible == true
+--     end
+--     isUIVisible = not isUIVisible
+-- end
 
+function toggleUI()
+    if ScreenGui then
+        ScreenGui.Enabled = not ScreenGui.Enabled  -- Toggle UI visibility
+        isUIVisible = ScreenGui.Enabled
+    end
+end
 -----------------------------UNLIMITED AMMO---------------------------
 local function autoReloadTool(tool)
     -- Sicherstellen, dass das Tool existiert und ein gültiges Tool ist
