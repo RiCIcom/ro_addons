@@ -176,7 +176,6 @@ for _, tabName in ipairs(Tabs) do
     TabButton.TextSize = 18
     TabButton.Parent = Sidebar
     TabButtons[tabName] = TabButton
-    TabFrames.ZIndex = 4
 
     local buttonCorner = Instance.new("UICorner")
     buttonCorner.CornerRadius = UDim.new(0, 10)
@@ -205,7 +204,6 @@ for _, tabName in ipairs(Tabs) do
             local goal = {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}
             local tween = TweenService:Create(button, tweenInfo, goal)
             tween:Play()
-            button.ZIndex = 6
         end
     
         -- Aktiviere den ausgewählten Button
@@ -387,25 +385,6 @@ GiveWeaponsButton.Parent = SettingsContent
 local giveWeaponsCorner = Instance.new("UICorner")
 giveWeaponsCorner.CornerRadius = UDim.new(0, 10)
 giveWeaponsCorner.Parent = GiveWeaponsButton
-
-MainFrame.ZIndex = 3
-shadow.ZIndex = 2
-TitleBar.ZIndex = 4
-Sidebar.ZIndex = 3
-Title.ZIndex = 5
-Logo.ZIndex = 5
-
-FlyButton.ZIndex = 6
-FlySpeedTextBox.ZIndex = 6
-ESPNamesButton.ZIndex = 6
-ESPBoxButton.ZIndex = 6
-ESPLinesButton.ZIndex = 6
-HitboxSizeSlider.ZIndex = 6
-UnlimitedAmmoButton.ZIndex = 6
-SpeedfireButton.ZIndex = 6
-PlayersList.ZIndex = 6
-GodModeButton.ZIndex = 6
-GiveWeaponsButton.ZIndex = 6
 
 local dragging, dragInput, dragStart, startPos
 
