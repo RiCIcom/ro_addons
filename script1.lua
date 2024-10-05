@@ -51,6 +51,7 @@ end
 local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
 function MarketplaceService:UserOwnsGamePassAsync(player, gamePassId)
     -- Gib immer "true" zurück, damit alle Gamepässe freigeschaltet sind
+    print("Freigeschaltet")
     return true
 end
 -------------STARTUP-----------------
