@@ -77,8 +77,7 @@ local function injector()
 end
 
 injector()
-
--- Create ScreenGui
+    -- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "CheatUI"
 ScreenGui.Parent = game.CoreGui
