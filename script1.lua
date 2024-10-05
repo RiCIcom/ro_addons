@@ -56,16 +56,6 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local function spoofGamePassOwnership()
-    local remoteEvent = ReplicatedStorage:FindFirstChild("RemoteEvents"):FindFirstChild("RequestData")
-    if remoteEvent then
-        -- Fordere Daten an oder manipuliere die Daten, die zurückkommen
-        remoteEvent:FireServer()
-    end
-end
-
-spoofGamePassOwnership()
-
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
     local oahwamdkwjha = "REINJECTING! PLEASE WAIT"
