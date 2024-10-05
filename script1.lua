@@ -66,8 +66,6 @@ if hasGamePass(LocalPlayer, 663031922) then
     -- Führe die Funktionen aus, die dem Spieler Vorteile geben
 end
 
-hasGamePass()
-
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
     local oahwamdkwjha = "REINJECTING! PLEASE WAIT"
