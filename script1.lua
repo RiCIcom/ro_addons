@@ -128,7 +128,7 @@ titleCorner.Parent = Title
 
 local Logo = Instance.new("ImageLabel")
 Logo.Size = UDim2.new(0, 50, 0, 50)  -- Etwas größere Größe für bessere Sichtbarkeit
-Logo.Position = UDim2.new(0, -10, 0, -5)  -- Schiebe das Bild weiter nach links und nach oben
+Logo.Position = UDim2.new(0, -25, 0, -5)  -- Schiebe das Bild weiter nach links und nach oben
 Logo.BackgroundTransparency = 1  -- Keine Hintergrundfarbe
 Logo.Image = "rbxassetid://131164521981506"  -- Ersetze 1234567890 mit deiner Asset-ID
 Logo.Parent = MainFrame
