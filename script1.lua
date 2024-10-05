@@ -448,43 +448,32 @@ local function resetTransparency()
     end
 end
 
-function fadeInUI(duration)
-    resetTransparency()  -- Setzt Transparenzwerte zurück, bevor die Animation beginnt
+function fadeInUI()
     ScreenGui.Enabled = true
-    local descendants = ScreenGui:GetDescendants()
-    for _, element in ipairs(descendants) do
+    for _, element in ipairs(ScreenGui:GetDescendants()) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 0.1}
-            local tween = TweenService:Create(element, tweenInfo, goal)
-            tween:Play()
+            element.BackgroundTransparency = 0.1
+            element.Visible = true  -- Stelle sicher, dass alles sichtbar ist
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 0, BackgroundTransparency = 0.1}
-            local tween = TweenService:Create(element, tweenInfo, goal)
-            tween:Play()
+            element.TextTransparency = 0
+            element.BackgroundTransparency = 0.1
+            element.Visible = true
         end
     end
 end
 
-function fadeOutUI(duration)
-    local descendants = ScreenGui:GetDescendants()
-    for _, element in ipairs(descendants) do
+function fadeOutUI()
+    for _, element in ipairs(ScreenGui:GetDescendants()) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 1}
-            local tween = TweenService:Create(element, tweenInfo, goal)
-            tween:Play()
+            element.BackgroundTransparency = 1
+            element.Visible = false
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 1, BackgroundTransparency = 1}
-            local tween = TweenService:Create(element, tweenInfo, goal)
-            tween:Play()
+            element.TextTransparency = 1
+            element.BackgroundTransparency = 1
+            element.Visible = false
         end
     end
-    task.delay(duration, function()
-        ScreenGui.Enabled = false
-    end)
+    ScreenGui.Enabled = false
 end
 ----------------------FUNKTIONEN-----------------------
 ------------FLY
@@ -1075,17 +1064,11 @@ end
 
 function toggleUI()
     if isUIVisible then
-        fadeOutUI(1.5)
-        task.delay(1.5, function()
-            ScreenGui.Enabled = false
-            isUIVisible = false
-        end)
+        fadeOutUI()
     else
-        ScreenGui.Enabled = true
-        resetTransparency()
-        fadeInUI(1.5)
-        isUIVisible = true
+        fadeInUI()
     end
+    isUIVisible = not isUIVisible
 end
 
 -----------------------------UNLIMITED AMMO---------------------------
