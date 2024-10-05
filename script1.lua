@@ -198,12 +198,20 @@ for _, tabName in ipairs(Tabs) do
             frame.Visible = false
         end
         TabFrame.Visible = true
-
-        -- Animation for button when selected
+    
+        -- Animation für Button, wenn ausgewählt
         for _, button in pairs(TabButtons) do
-            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+            local goal = {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}
+            local tween = TweenService:Create(button, tweenInfo, goal)
+            tween:Play()
         end
-        TabButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    
+        -- Aktiviere den ausgewählten Button
+        local tweenInfoSelected = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+        local goalSelected = {BackgroundColor3 = Color3.fromRGB(100, 100, 100)}
+        local tweenSelected = TweenService:Create(TabButton, tweenInfoSelected, goalSelected)
+        tweenSelected:Play()
     end)
 end
 
