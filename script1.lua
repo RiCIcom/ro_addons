@@ -29,6 +29,7 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
+local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
@@ -47,12 +48,18 @@ local function createmessage(title, text, icon)
     })
 end
 
+function MarketplaceService:UserOwnsGamePassAsync(userId, gamePassId)
+    -- Hier kannst du eine Bedingung einbauen, ob du das generell tun möchtest oder für bestimmte Gamepasses
+    print("Überschreibe UserOwnsGamePassAsync für Gamepass-ID:", gamePassId)
+    return true
+end
 -------------STARTUP-----------------
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
+local MarketplaceService = game:GetService("MarketplaceService")
 
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
@@ -77,6 +84,19 @@ local function injector()
 end
 
 injector()
+
+Players.PlayerAdded:Connect(function(player)
+    local success, hasPass = pcall(function()
+        return MarketplaceService:UserOwnsGamePassAsync(player.UserId, GamepassID)
+    end)
+
+    if success and hasPass then
+        print(player.Name .. " besitzt den Gamepass!")
+        -- Gib dem Spieler die Belohnung oder Vorteile
+    else
+        print(player.Name .. " besitzt den Gamepass nicht.")
+    end
+end)
 -- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "CheatUI"
