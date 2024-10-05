@@ -14,9 +14,22 @@ local fastFireRate = 0.05
 local isUIVisible = true
 local godModeEnabled = false
 
-local Settings = _G.Settings
 local scversion = "v1.444"
 local extendedname = "EXTENDED PROGRAMMER CHEATS"
+
+local Settings = {
+    Fly = "F",
+    ToggleESP = "U",
+    FullESP = "L",
+    ESP_RADIUS = 500,
+    ToggleUI = "K",
+    ToggleGodMode = "G",
+    ToggleUnlimitedAmmo = "H",
+    IncreaseFlySpeed = "R",
+    DecreaseFlySpeed = "T",
+    SpectatePlayer = "Y",
+    TeleportToPlayer = "P"
+}
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
