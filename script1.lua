@@ -53,6 +53,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 local MarketplaceService = game:GetService("MarketplaceService")
+local player = Players.LocalPlayer
 
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
@@ -89,18 +90,6 @@ local gamePassID = 663031922
 
 injector()
 
-Players.PlayerAdded:Connect(function(player)
-    local success, hasPass = pcall(function()
-        return MarketplaceService:UserOwnsGamePassAsync(player.UserId, GamepassID)
-    end)
-
-    if success and hasPass then
-        print(player.Name .. " besitzt den Gamepass!")
-        -- Gib dem Spieler die Belohnung oder Vorteile
-    else
-        print(player.Name .. " besitzt den Gamepass nicht.")
-    end
-end)
 -- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "CheatUI"
