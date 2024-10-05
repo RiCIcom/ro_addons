@@ -56,15 +56,15 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-function hasGamePass(player, gamePassId)
-    return true  -- Simuliert, dass jeder GamePass besitzt wird
+local function spoofGamePassOwnership()
+    local remoteEvent = ReplicatedStorage:FindFirstChild("RemoteEvents"):FindFirstChild("RequestData")
+    if remoteEvent then
+        -- Fordere Daten an oder manipuliere die Daten, die zurückkommen
+        remoteEvent:FireServer()
+    end
 end
 
--- Beispiel für die Anwendung: Überprüfe, ob ein Spieler einen GamePass hat
-if hasGamePass(LocalPlayer, 663031922) then
-    print("Player besitzt den GamePass!")
-    -- Führe die Funktionen aus, die dem Spieler Vorteile geben
-end
+spoofGamePassOwnership()
 
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
