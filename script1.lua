@@ -418,17 +418,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-UserInputService.InputBegan:Connect(function(input, processed)
-    if processed then return end
-
-    -- Fly aktivieren/deaktivieren
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
-        toggleUI()
-    end
-end)
---------------------------------UI VISIBILTY
-
-
 ----------------------Animation Creator
 local function resetUICorners()
     local elements = {MainFrame, shadow, TitleBar, Sidebar}
@@ -930,6 +919,10 @@ end)
 -- Tasteneingabe abfangen und das UI ein- oder ausblenden
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
+
+    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
+        toggleUI()
+    end
 
     -- Fly aktivieren/deaktivieren
     if input.KeyCode == Enum.KeyCode[Settings.Fly] then
