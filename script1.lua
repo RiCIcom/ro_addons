@@ -333,21 +333,6 @@ local ammoButtonCorner = Instance.new("UICorner")
 ammoButtonCorner.CornerRadius = UDim.new(0, 10)
 ammoButtonCorner.Parent = UnlimitedAmmoButton
 
-local SpeedfireButton = Instance.new("TextButton")
-SpeedfireButton.Size = UDim2.new(0.6, 0, 0, 50)
-SpeedfireButton.Position = UDim2.new(0.2, 0, 0.5, 20) -- Position unter dem HitboxSizeSlider
-SpeedfireButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-SpeedfireButton.Text = "Speedfire: OFF"
-SpeedfireButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-SpeedfireButton.Font = Enum.Font.SourceSans
-SpeedfireButton.TextSize = 18
-SpeedfireButton.Parent = RageContent
-
--- Adding corner radius for SpeedfireButton
-local speedfireButtonCorner = Instance.new("UICorner")
-speedfireButtonCorner.CornerRadius = UDim.new(0, 10)
-speedfireButtonCorner.Parent = SpeedfireButton
-
 -- Adding Content for Players Tab
 local PlayersContent = TabFrames["Players"]
 
@@ -578,41 +563,6 @@ FlyButton.MouseButton1Click:Connect(toggleFly)
         end
     end)
 
--------------SPEEDFIRE
-local function toggleSpeedfire()
-    SpeedfireEnabled = not SpeedfireEnabled
-    SpeedfireButton.Text = SpeedfireEnabled and "Speedfire: ON" or "Speedfire: OFF"
-
-    if SpeedfireEnabled then
-        print("Speedfire aktiviert")
-        task.spawn(function()
-            while SpeedfireEnabled do
-                if LocalPlayer.Character then
-                    local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
-                    if tool and tool:FindFirstChild("Handle") then  -- Sicherstellen, dass das Tool eine Waffe ist
-                        -- Argumente für das Schießen vorbereiten
-                        local args = {
-                            [1] = tool,
-                            [2] = {
-                                ["id"] = 12,  -- Beispielhafte ID für die Kugel
-                                ["charge"] = 0,
-                                ["dir"] = Vector3.new(-0.9485447406768799, -0.18350273370742798, 0.2580493092536926),
-                                ["origin"] = tool.Handle.Position  -- Ursprungsposition des Schusses
-                            }
-                        }
-
-                        -- WeaponFired Event auslösen
-                        game:GetService("ReplicatedStorage").WeaponsSystem.Network.WeaponFired:FireServer(unpack(args))
-                    end
-                end
-                task.wait(fastFireRate) -- Wartezeit für die schnelle Feuerrate
-            end
-        end)
-    else
-        print("Speedfire deaktiviert")
-    end
-end
-SpeedfireButton.MouseButton1Click:Connect(toggleSpeedfire)
 --------------------------------------ESP BOXES-----------------------------
 function createESPBox(player)
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
