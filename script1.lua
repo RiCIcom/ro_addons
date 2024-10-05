@@ -47,6 +47,14 @@ local function createmessage(title, text, icon)
     })
 end
 
+-----------------------------UI VISIBILITY
+UserInputService.InputBegan:Connect(function( input, processed)
+    if processed then return end
+
+    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
+        toggleUI(isUIVisible)
+    end
+end)
 -------------STARTUP-----------------
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -919,11 +927,6 @@ end)
 -- Tasteneingabe abfangen und das UI ein- oder ausblenden
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
-
-    -- Toggle UI Sichtbarkeit
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
-        toggleUI(isUIVisible)
-    end
 
     -- Fly aktivieren/deaktivieren
     if input.KeyCode == Enum.KeyCode[Settings.Fly] then
