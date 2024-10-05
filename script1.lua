@@ -387,6 +387,13 @@ local giveWeaponsCorner = Instance.new("UICorner")
 giveWeaponsCorner.CornerRadius = UDim.new(0, 10)
 giveWeaponsCorner.Parent = GiveWeaponsButton
 
+MainFrame.ZIndex = 3
+shadow.ZIndex = 2
+TitleBar.ZIndex = 4
+Sidebar.ZIndex = 3
+Title.ZIndex = 5
+Logo.ZIndex = 5
+
 local dragging, dragInput, dragStart, startPos
 
 local function update(input)
