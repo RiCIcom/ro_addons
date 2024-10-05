@@ -900,6 +900,35 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 
+-- Tasteneingabe abfangen und das UI ein- oder ausblenden
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
+
+    -- Toggle UI Sichtbarkeit
+    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
+        toggleUI(isUIVisible)
+    end
+
+    -- Fly aktivieren/deaktivieren
+    if input.KeyCode == Enum.KeyCode[Settings.Fly] then
+        toggleFly()
+    end
+
+    -- ESP ein/aus
+    if input.KeyCode == Enum.KeyCode[Settings.ToggleESP] then
+        toggleESPBox()
+        toggleESPNames()
+        toggleESPLines()
+    end
+
+    -- Alle ESP Features auf einmal aktivieren
+    if input.KeyCode == Enum.KeyCode[Settings.FullESP] then
+        toggleESPNames()
+        toggleESPBox()
+        toggleESPLines()
+    end
+end)
+
 -------------------------------------------HITBOX CHANGER------------------------
 HitboxSizeSlider.FocusLost:Connect(function(enterPressed)
     if enterPressed then
@@ -1023,7 +1052,7 @@ local function toggleHitboxVisibility()
     end
 end
 
-local function toggleUI()
+function toggleUI()
     if isUIVisible then
         fadeOutUI(1.5)
         delay(1.5, function()
@@ -1036,35 +1065,6 @@ local function toggleUI()
         isUIVisible = true
     end
 end
-
--- Tasteneingabe abfangen und das UI ein- oder ausblenden
-UserInputService.InputBegan:Connect(function(input, processed)
-    if processed then return end
-
-    -- Toggle UI Sichtbarkeit
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
-        toggleUI(isUIVisible)
-    end
-
-    -- Fly aktivieren/deaktivieren
-    if input.KeyCode == Enum.KeyCode[Settings.Fly] then
-        toggleFly()
-    end
-
-    -- ESP ein/aus
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleESP] then
-        toggleESPBox()
-        toggleESPNames()
-        toggleESPLines()
-    end
-
-    -- Alle ESP Features auf einmal aktivieren
-    if input.KeyCode == Enum.KeyCode[Settings.FullESP] then
-        toggleESPNames()
-        toggleESPBox()
-        toggleESPLines()
-    end
-end)
 
 -----------------------------UNLIMITED AMMO---------------------------
 local function autoReloadTool(tool)
