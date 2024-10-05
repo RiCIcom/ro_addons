@@ -1068,7 +1068,7 @@ local function toggleHitboxVisibility()
     end
 end
 
-local function toggleUI()
+function toggleUI()
     if isUIVisible then
         fadeOutUI(1.5)
         delay(1.5, function()
