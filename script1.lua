@@ -419,17 +419,20 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 ----------------------Animation Creator
-local function resetUICorners()
-    local elements = {MainFrame, shadow, TitleBar, Sidebar}
-    for _, element in ipairs(elements) do
-        if element:FindFirstChild("UICorner") then
-            element.UICorner.CornerRadius = UDim.new(0, 15)
+local function resetTransparency()
+    local descendants = ScreenGui:GetDescendants()
+    for _, element in ipairs(descendants) do
+        if element:IsA("Frame") or element:IsA("ImageLabel") then
+            element.BackgroundTransparency = 0.1  -- Setze den gewünschten Ursprungswert
+        elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
+            element.TextTransparency = 0
+            element.BackgroundTransparency = 0.1
         end
     end
 end
 
 function fadeInUI(duration)
-    resetUICorners()  -- Stelle sicher, dass die CornerRadius-Werte korrekt sind
+    resetTransparency()  -- Transparenz sicherstellen, bevor Animation beginnt
     ScreenGui.Enabled = true
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
@@ -447,36 +450,29 @@ function fadeInUI(duration)
     end
 end
 
--- Fade Out Funktion
 function fadeOutUI(duration)
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 1}  -- Komplett transparent machen
+            local goal = {BackgroundTransparency = 1}
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 1, BackgroundTransparency = 1}  -- Text und Hintergrund transparent machen
+            local goal = {TextTransparency = 1, BackgroundTransparency = 1}
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         end
     end
-    -- Nach der Animation das UI deaktivieren, um sicherzustellen, dass es ausgeblendet bleibt
-    delay(duration, function()
-        ScreenGui.Enabled = false
-    end)
 end
 
-local function resetTransparency()
-    local descendants = ScreenGui:GetDescendants()
-    for _, element in ipairs(descendants) do
-        if element:IsA("Frame") or element:IsA("ImageLabel") then
-            element.BackgroundTransparency = 0.1  -- Setze den gewünschten Ursprungswert
-        elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
-            element.TextTransparency = 0
-            element.BackgroundTransparency = 0.1
+local function resetUICorners()
+    local elements = {MainFrame, shadow, TitleBar, Sidebar}
+    for _, element in ipairs(elements) do
+        if element:FindFirstChildWhichIsA("UICorner") then
+            local uicorner = element:FindFirstChildWhichIsA("UICorner")
+            uicorner.CornerRadius = UDim.new(0, 15)
         end
     end
 end
@@ -1070,7 +1066,7 @@ end
 function toggleUI()
     if isUIVisible then
         fadeOutUI(1.5)
-        delay(1.5, function()
+        task.delay(1.5, function()
             ScreenGui.Enabled = false
             isUIVisible = false
         end)
