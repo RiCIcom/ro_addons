@@ -164,7 +164,6 @@ local Tabs = {"Main", "Visuals", "Rage", "Players", "Settings"}
 local TabButtons = {}
 local TabFrames = {}
 
-local buttonYOffset = 10
 for _, tabName in ipairs(Tabs) do
     local TabButton = Instance.new("TextButton")
     TabButton.Size = UDim2.new(0.9, 0, 0, 40)
@@ -181,22 +180,11 @@ for _, tabName in ipairs(Tabs) do
     buttonCorner.CornerRadius = UDim.new(0, 10)
     buttonCorner.Parent = TabButton
 
-    buttonYOffset = buttonYOffset + 50
-
-    -- Create Frame for Tab Content
-    local TabFrame = Instance.new("Frame")
-    TabFrame.Size = UDim2.new(1, -150, 1, -40)
-    TabFrame.Position = UDim2.new(0, 150, 0, 40)
-    TabFrame.BackgroundTransparency = 1
-    TabFrame.Visible = false
-    TabFrame.Parent = MainFrame
-    TabFrames[tabName] = TabFrame
-
     TabButton.MouseButton1Click:Connect(function()
         for _, frame in pairs(TabFrames) do
             frame.Visible = false
         end
-        TabFrame.Visible = true
+        Tabs.Visible = true
     
         -- Animation für Button, wenn ausgewählt
         for _, button in pairs(TabButtons) do
