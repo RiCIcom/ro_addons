@@ -77,7 +77,7 @@ local function injector()
 end
 
 injector()
-    -- Create ScreenGui
+-- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "CheatUI"
 ScreenGui.Parent = game.CoreGui
@@ -1064,9 +1064,9 @@ end
 
 function toggleUI()
     if isUIVisible then
-        ScreenGui.Visible = ScreenGui.Visible == false
+        ScreenGui.Visible = ScreenGui.Enabled == false
     else
-        ScreenGui.Visible = ScreenGui.Visible == false
+        ScreenGui.Visible = ScreenGui.Visible == true
     end
     isUIVisible = not isUIVisible
 end
