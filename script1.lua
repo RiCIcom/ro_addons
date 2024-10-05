@@ -417,14 +417,17 @@ UserInputService.InputChanged:Connect(function(input)
         update(input)
     end
 end)
---------------------------------UI VISIBILTY
-UserInputService.InputBegan:Connect(function( input, processed)
+
+UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
 
+    -- Fly aktivieren/deaktivieren
     if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
-        toggleUI(isUIVisible)
+        toggleUI()
     end
 end)
+--------------------------------UI VISIBILTY
+
 
 ----------------------Animation Creator
 local function resetUICorners()
