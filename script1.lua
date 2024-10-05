@@ -419,18 +419,28 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 ----------------------Animation Creator
-local function fadeInUI(duration)
-    ScreenGui.Enabled = true  -- Wir stellen sicher, dass das UI aktiviert bleibt
+local function resetUICorners()
+    local elements = {MainFrame, shadow, TitleBar, Sidebar}
+    for _, element in ipairs(elements) do
+        if element:FindFirstChild("UICorner") then
+            element.UICorner.CornerRadius = UDim.new(0, 15)
+        end
+    end
+end
+
+function fadeInUI(duration)
+    resetUICorners()  -- Stelle sicher, dass die CornerRadius-Werte korrekt sind
+    ScreenGui.Enabled = true
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {BackgroundTransparency = 0.1}  -- Stelle sicher, dass die Transparenz wie ursprünglich gesetzt ist
+            local goal = {BackgroundTransparency = 0.1}
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
             local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-            local goal = {TextTransparency = 0, BackgroundTransparency = 0.1}  -- Konsistente Transparenz für Text- und Hintergrund
+            local goal = {TextTransparency = 0, BackgroundTransparency = 0.1}
             local tween = TweenService:Create(element, tweenInfo, goal)
             tween:Play()
         end
@@ -438,7 +448,7 @@ local function fadeInUI(duration)
 end
 
 -- Fade Out Funktion
-local function fadeOutUI(duration)
+function fadeOutUI(duration)
     local descendants = ScreenGui:GetDescendants()
     for _, element in ipairs(descendants) do
         if element:IsA("Frame") or element:IsA("ImageLabel") then
@@ -457,6 +467,18 @@ local function fadeOutUI(duration)
     delay(duration, function()
         ScreenGui.Enabled = false
     end)
+end
+
+local function resetTransparency()
+    local descendants = ScreenGui:GetDescendants()
+    for _, element in ipairs(descendants) do
+        if element:IsA("Frame") or element:IsA("ImageLabel") then
+            element.BackgroundTransparency = 0.1  -- Setze den gewünschten Ursprungswert
+        elseif element:IsA("TextLabel") or element:IsA("TextButton") or element:IsA("TextBox") then
+            element.TextTransparency = 0
+            element.BackgroundTransparency = 0.1
+        end
+    end
 end
 ----------------------FUNKTIONEN-----------------------
 ------------FLY
@@ -1046,7 +1068,7 @@ local function toggleHitboxVisibility()
     end
 end
 
-function toggleUI()
+local function toggleUI()
     if isUIVisible then
         fadeOutUI(1.5)
         delay(1.5, function()
@@ -1054,6 +1076,7 @@ function toggleUI()
             isUIVisible = false
         end)
     else
+        resetTransparency()
         ScreenGui.Enabled = true
         fadeInUI(1.5)
         isUIVisible = true
