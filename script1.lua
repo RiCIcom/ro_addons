@@ -1064,9 +1064,9 @@ end
 
 function toggleUI()
     if isUIVisible then
-        fadeOutUI()
+        ScreenGui.Visible = ScreenGui.Visible == false
     else
-        fadeInUI()
+        ScreenGui.Visible = ScreenGui.Visible == false
     end
     isUIVisible = not isUIVisible
 end
