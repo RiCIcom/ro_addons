@@ -547,6 +547,15 @@ local function toggleFly()
     end
 end
 
+FlyButton.MouseButton1Click:Connect(toggleFly)
+    FlySpeedTextBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            adjustFlySpeed()
+        else
+            FlySpeedTextBox.Text = "Enter Fly Speed (5 - 400)"
+        end
+    end)
+
 function adjustFlySpeed()
     local inputSpeed = tonumber(FlySpeedTextBox.Text)
     if inputSpeed and inputSpeed >= 5 and inputSpeed <= 400 then
@@ -1393,16 +1402,6 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 --Execute Elements
-
-FlyButton.MouseButton1Click:Connect(toggleFly)
-    FlySpeedTextBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            adjustFlySpeed()
-        else
-            FlySpeedTextBox.Text = "Enter Fly Speed (5 - 400)"
-        end
-    end)
-
 
 Players.PlayerAdded:Connect(updatePlayerList)
 Players.PlayerRemoving:Connect(updatePlayerList)
