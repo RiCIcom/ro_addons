@@ -29,14 +29,16 @@ local godModeEnabled = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
-
-local MarketplaceService = game:GetService("MarketplaceService")
-local originalUserOwnsGamePassAsync = MarketplaceService.UserOwnsGamePassAsync
-function MarketplaceService:UserOwnsGamePassAsync(player, gamePassId)
-    -- Gib immer "true" zurück, damit alle Gamepässe freigeschaltet sind
-    print("Freigeschaltet")
-    return true
-end
+local gamePassID = 663031922
+MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassID):andThen(function(ownsPass)
+    if ownsPass then
+        print("Player owns the GamePass!")
+    else
+        print("Player does not own the GamePass.")
+    end
+end):catch(function(error)
+    warn("An error occurred: " .. tostring(error))
+end)
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
