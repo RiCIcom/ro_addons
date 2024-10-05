@@ -164,7 +164,9 @@ local Tabs = {"Main", "Visuals", "Rage", "Players", "Settings"}
 local TabButtons = {}
 local TabFrames = {}
 
+local buttonYOffset = 10
 for _, tabName in ipairs(Tabs) do
+    -- Erstelle den TabButton
     local TabButton = Instance.new("TextButton")
     TabButton.Size = UDim2.new(0.9, 0, 0, 40)
     TabButton.Position = UDim2.new(0.05, 0, 0, buttonYOffset)
@@ -176,25 +178,45 @@ for _, tabName in ipairs(Tabs) do
     TabButton.Parent = Sidebar
     TabButtons[tabName] = TabButton
 
+    -- Ecke hinzufügen
     local buttonCorner = Instance.new("UICorner")
     buttonCorner.CornerRadius = UDim.new(0, 10)
     buttonCorner.Parent = TabButton
 
+    buttonYOffset = buttonYOffset + 50
+
+    -- Erstelle den TabFrame für den Inhalt
+    local TabFrame = Instance.new("Frame")
+    TabFrame.Size = UDim2.new(1, -150, 1, -40)
+    TabFrame.Position = UDim2.new(0, 150, 0, 40)
+    TabFrame.BackgroundTransparency = 1
+    TabFrame.Visible = false
+    TabFrame.Parent = MainFrame
+    TabFrames[tabName] = TabFrame -- Zuweisung des Frames in TabFrames
+
+    -- Maus-Klick-Verbindung für den Button
     TabButton.MouseButton1Click:Connect(function()
-        for _, frame in pairs(TabFrames) do
-            frame.Visible = false
+        -- Sichtbarkeit aller TabFrames auf false setzen
+        for name, frame in pairs(TabFrames) do
+            if typeof(frame) == "Instance" and frame:IsA("Frame") then
+                frame.Visible = false
+            else
+                warn("TabFrame[" .. tostring(name) .. "] ist kein gültiger Frame! Überprüfe die Zuweisungen.")
+            end
         end
-        Tabs.Visible = true
-    
-        -- Animation für Button, wenn ausgewählt
+
+        -- Zeige den ausgewählten TabFrame an
+        TabFrame.Visible = true
+
+        -- Animation für Buttons
         for _, button in pairs(TabButtons) do
             local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
             local goal = {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}
             local tween = TweenService:Create(button, tweenInfo, goal)
             tween:Play()
         end
-    
-        -- Aktiviere den ausgewählten Button
+
+        -- Aktivierte Button-Farbe ändern
         local tweenInfoSelected = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
         local goalSelected = {BackgroundColor3 = Color3.fromRGB(100, 100, 100)}
         local tweenSelected = TweenService:Create(TabButton, tweenInfoSelected, goalSelected)
