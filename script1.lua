@@ -28,7 +28,7 @@ local isUIVisible = true
 local godModeEnabled = false
 
 local scversion = "v1.444"
-local extendedname = "EXTENDED PROGRAMMER CHEATS"
+local extendedname = "DarkPulse System X"
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
@@ -116,7 +116,7 @@ shadowCorner.Parent = shadow
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 40)
 Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Title.Text = "Dream UI - Cheat Panel"
+Title.Text = "DarkPulse - NBTF System"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextScaled = true
 Title.Font = Enum.Font.SourceSansBold
@@ -125,6 +125,18 @@ Title.Parent = MainFrame
 local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 15)
 titleCorner.Parent = Title
+
+local Logo = Instance.new("ImageLabel")
+Logo.Size = UDim2.new(0, 40, 0, 40)  -- Größe des Logos
+Logo.Position = UDim2.new(0, 10, 0, 0)  -- Position links im Titelbereich
+Logo.BackgroundTransparency = 1  -- Keine Hintergrundfarbe
+Logo.Image = "rbxassetid://131164521981506"  -- Ersetze 1234567890 mit deiner Asset-ID
+Logo.Parent = MainFrame
+
+-- UICorner für das Logo hinzufügen, falls gewünscht
+local logoCorner = Instance.new("UICorner")
+logoCorner.CornerRadius = UDim.new(0, 15)
+logoCorner.Parent = Logo
 
 -- Create Sidebar for Tabs
 local Sidebar = Instance.new("Frame")
