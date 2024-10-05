@@ -47,14 +47,6 @@ local function createmessage(title, text, icon)
     })
 end
 
------------------------------UI VISIBILITY
-UserInputService.InputBegan:Connect(function( input, processed)
-    if processed then return end
-
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
-        toggleUI(isUIVisible)
-    end
-end)
 -------------STARTUP-----------------
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -423,6 +415,14 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         update(input)
+    end
+end)
+--------------------------------UI VISIBILTY
+UserInputService.InputBegan:Connect(function( input, processed)
+    if processed then return end
+
+    if input.KeyCode == Enum.KeyCode[Settings.ToggleUI] then
+        toggleUI(isUIVisible)
     end
 end)
 
