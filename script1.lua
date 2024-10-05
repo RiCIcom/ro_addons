@@ -177,6 +177,7 @@ for _, tabName in ipairs(Tabs) do
     TabButton.TextSize = 18
     TabButton.Parent = Sidebar
     TabButtons[tabName] = TabButton
+    TabFrames.ZIndex = 4
 
     local buttonCorner = Instance.new("UICorner")
     buttonCorner.CornerRadius = UDim.new(0, 10)
@@ -205,6 +206,7 @@ for _, tabName in ipairs(Tabs) do
             local goal = {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}
             local tween = TweenService:Create(button, tweenInfo, goal)
             tween:Play()
+            button.ZIndex = 6
         end
     
         -- Aktiviere den ausgewählten Button
@@ -393,6 +395,18 @@ TitleBar.ZIndex = 4
 Sidebar.ZIndex = 3
 Title.ZIndex = 5
 Logo.ZIndex = 5
+
+FlyButton.ZIndex = 6
+FlySpeedTextBox.ZIndex = 6
+ESPNamesButton.ZIndex = 6
+ESPBoxButton.ZIndex = 6
+ESPLinesButton.ZIndex = 6
+HitboxSizeSlider.ZIndex = 6
+UnlimitedAmmoButton.ZIndex = 6
+SpeedfireButton.ZIndex = 6
+PlayersList.ZIndex = 6
+GodModeButton.ZIndex = 6
+GiveWeaponsButton.ZIndex = 6
 
 local dragging, dragInput, dragStart, startPos
 
@@ -1243,6 +1257,21 @@ local function teleportToPlayer(player)
 end
 
 -----------------------CREATE PLAYERLIST--------------------
+
+for _, playerFrame in ipairs(PlayersList:GetChildren()) do
+    if playerFrame:IsA("Frame") then
+        playerFrame.ZIndex = 6
+        local spectateButton = playerFrame:FindFirstChild("SpectateButton")
+        local teleportButton = playerFrame:FindFirstChild("TeleportButton")
+        if spectateButton then
+            spectateButton.ZIndex = 7
+        end
+        if teleportButton then
+            teleportButton.ZIndex = 7
+        end
+    end
+end
+
 local function updatePlayerList()
     -- Alle bestehenden Spieler-Einträge entfernen
     for _, child in ipairs(PlayersList:GetChildren()) do
@@ -1432,6 +1461,15 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 --Execute Elements
+PlayersList.ZIndex = 5
+for _, child in ipairs(PlayersList:GetChildren()) do
+    if child:IsA("Frame") then
+        child.ZIndex = 6
+        for _, element in ipairs(child:GetChildren()) do
+            element.ZIndex = 7
+        end
+    end
+end
 
 Players.PlayerAdded:Connect(updatePlayerList)
 Players.PlayerRemoving:Connect(updatePlayerList)
