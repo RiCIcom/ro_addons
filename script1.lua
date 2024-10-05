@@ -130,14 +130,14 @@ titleCorner.Parent = Title
 -- Logo hinzufügen
 local Logo = Instance.new("ImageLabel")
 Logo.Size = UDim2.new(0, 50, 0, 50)  -- Größe des Logos
-Logo.Position = UDim2.new(0, 5, 0, -0.5)  -- Das Bild wird leicht nach oben und links verschoben
+Logo.Position = UDim2.new(0, 5, 0, -1)  -- Das Bild wird leicht nach oben und links verschoben
 Logo.BackgroundTransparency = 1  -- Keine Hintergrundfarbe
 Logo.Image = "rbxassetid://131164521981506"  -- Verwende die tatsächliche Asset-ID deines Logos
 Logo.Parent = MainFrame
 
 -- UICorner für das Logo hinzufügen, falls gewünscht
 local logoCorner = Instance.new("UICorner")
-logoCorner.CornerRadius = UDim.new(1, 0)  -- Runde das Bild vollständig ab
+logoCorner.CornerRadius = UDim.new(0, 15)  -- Runde das Bild vollständig ab
 logoCorner.Parent = Logo
 
 -- Create Sidebar for Tabs
