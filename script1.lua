@@ -28,6 +28,7 @@ local unlimitedAmmo = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
+local allowedPlaceId = 6153709
 
 -------------------Meine Whitelist--------------------
 local allowedWeapons = {
@@ -70,9 +71,18 @@ if game.CoreGui:FindFirstChild("CheatUI") then
 end
 
 local function injector()
+    checkGame()
     createmessage(extendedname, scversion)
     createmessage(extendedname, "Please Wait 5 Seconds, it inject automatically")
     wait(5)
+end
+
+local function checkGame()
+    if game.PlaceId ~= allowedPlaceId then
+        game.Players.LocalPlayer:Kick("This Script only supports the Game NBFT. Please rejoin without the Tool!")
+    else
+        print("Game: NBFT. 🚀INJECTING...")
+    end
 end
 
 injector()
