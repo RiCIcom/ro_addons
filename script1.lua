@@ -4,7 +4,6 @@ local Settings = {
     FullESP = "L",
     ESP_RADIUS = 500,
     ToggleUI = "K",
-    ToggleGodMode = "G",
     ToggleUnlimitedAmmo = "H",
     IncreaseFlySpeed = "R",
     DecreaseFlySpeed = "T",
@@ -25,7 +24,7 @@ local spectateConnection = nil
 local SpeedfireEnabled = false
 local fastFireRate = 0.05
 local isUIVisible = true
-local godModeEnabled = false
+local unlimitedAmmo = false
 
 local scversion = "v1.444"
 local extendedname = "DarkPulse System X"
@@ -43,18 +42,16 @@ local function createmessage(title, text, icon)
     game:GetService("StarterGui"):SetCore("SendNotification",{
         Title = title or "NOTITLE",
         Text = text or "NOMESSAGE",
-        Icon = icon or "rbxassetid://1234567890"
+        Icon = icon or "rbxassetid://131164521981506"
     })
 end
+
 -------------STARTUP-----------------
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
-local MarketplaceService = game:GetService("MarketplaceService")
-local player = Players.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 if game.CoreGui:FindFirstChild("CheatUI") then
     local awdwipaoihd = extendedname
@@ -79,7 +76,6 @@ local function injector()
 end
 
 injector()
-
 -- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "CheatUI"
@@ -356,25 +352,11 @@ playersListCorner.Parent = PlayersList
 -- Adding Content for Settings Tab
 local SettingsContent = TabFrames["Settings"]
 
-local GodModeButton = Instance.new("TextButton")
-GodModeButton.Size = UDim2.new(0.6, 0, 0, 50)
-GodModeButton.Position = UDim2.new(0.2, 0, 0.1, 0)
-GodModeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-GodModeButton.Text = "GodMode: OFF"
-GodModeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-GodModeButton.Font = Enum.Font.SourceSans
-GodModeButton.TextSize = 18
-GodModeButton.Parent = SettingsContent
-
-local godModeCorner = Instance.new("UICorner")
-godModeCorner.CornerRadius = UDim.new(0, 10)
-godModeCorner.Parent = GodModeButton
-
 local GiveWeaponsButton = Instance.new("TextButton")
 GiveWeaponsButton.Size = UDim2.new(0.6, 0, 0, 50)
 GiveWeaponsButton.Position = UDim2.new(0.2, 0, 0.3, 10)
 GiveWeaponsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-GiveWeaponsButton.Text = "Give All Weapons"
+GiveWeaponsButton.Text = "Give All Weapons(SOON!)"
 GiveWeaponsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 GiveWeaponsButton.Font = Enum.Font.SourceSans
 GiveWeaponsButton.TextSize = 18
@@ -921,10 +903,13 @@ function adjustHitboxSize()
     end
 end
 
--- Hilfsfunktion zum Anpassen der Hitbox-Größe eines Spielers
 function adjustPlayerHitbox(player, sizeMultiplier)
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
         return
+    end
+
+    if player == LocalPlayer then
+        return  -- Keine Anpassung der Hitbox für den LocalPlayer
     end
 
     local character = player.Character
@@ -934,18 +919,7 @@ function adjustPlayerHitbox(player, sizeMultiplier)
         return
     end
 
-    -- Sichern der aktuellen Position und Verhindern von Umfallen
-    local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if rootPart then
-        rootPart.Anchored = true
-    end
-
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-    humanoid.PlatformStand = true
-
-    -- Liste der relevanten Trefferzonen
+    -- Liste der relevanten Trefferzonen, die wir vergrößern wollen
     local hitboxParts = {"Head", "UpperTorso", "LowerTorso"}
 
     for _, partName in ipairs(hitboxParts) do
@@ -959,189 +933,175 @@ function adjustPlayerHitbox(player, sizeMultiplier)
                 originalSize.Parent = part
             end
 
-            -- Hitbox-Größe anpassen
-            part.CanCollide = false -- Deaktiviere Kollision vor der Anpassung
-            part.Size = part:FindFirstChild("OriginalSize").Value * sizeMultiplier
-            part.Massless = true  -- Keine physikalische Masse, damit Bewegungen nicht beeinträchtigt werden
-            part.CanCollide = false -- Behalte CanCollide auf false, um Probleme zu verhindern
+            -- Ursprüngliche Farbe speichern
+            if not part:FindFirstChild("OriginalColor") then
+                local originalColor = Instance.new("BrickColorValue")
+                originalColor.Name = "OriginalColor"
+                originalColor.Value = part.BrickColor
+                originalColor.Parent = part
+            end
 
-            -- Transparenz einstellen (z.B. 0.5 für Sichtbarkeit)
-            part.Transparency = 0.5  
+            -- Vergrößere die Hitbox und ändere das Design
+            part.Size = part:FindFirstChild("OriginalSize").Value * sizeMultiplier
+            part.BrickColor = BrickColor.new("Bright red")  -- Rot als visuelles Feedback
+            part.Transparency = 0.5  -- Leicht transparent, um die Anpassung sichtbar zu machen
+            part.Massless = true
+            part.CanCollide = false  -- Keine Kollision, um Probleme zu verhindern
         end
     end
+end
 
-    -- Sicherstellen, dass sich der Spieler nicht verschiebt
-    task.wait(0.1)
+-- Verbindung für Spielerwechsel, um Tools automatisch zu überwachen
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        task.wait(1)  -- Warte, bis der Charakter vollständig geladen ist
+        adjustPlayerHitbox(player, 1.5)  -- Anpassung der Hitbox, z.B. 1.5-fache Größe
+    end)
+end)
 
-    -- Stelle sicher, dass der Charakter wieder frei beweglich ist
-    if rootPart then
-        rootPart.Anchored = false
+-- Verbindung für bereits vorhandene Spieler
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        if player.Character then
+            adjustPlayerHitbox(player, 1.5)
+        end
+
+        player.CharacterAdded:Connect(function(character)
+            task.wait(1)  -- Warte, bis der Charakter vollständig geladen ist
+            adjustPlayerHitbox(player, 1.5)  -- Anpassung der Hitbox, z.B. 1.5-fache Größe
+        end)
+    end
+end
+
+-- Funktion zur Rücksetzung der Originalgröße (falls benötigt)
+function resetPlayerHitbox(player)
+    if not player.Character then
+        return
     end
 
-    humanoid.PlatformStand = false
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, true)
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
-    humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+    local character = player.Character
+    local hitboxParts = {"Head", "UpperTorso", "LowerTorso"}
 
-    -- Setze eine angemessene Kollisionskontrolle zurück
     for _, partName in ipairs(hitboxParts) do
         local part = character:FindFirstChild(partName)
         if part and part:IsA("BasePart") then
-            part.CanCollide = true -- Nach der Anpassung wieder auf True setzen, falls notwendig
-        end
-    end
-end
+            local originalSize = part:FindFirstChild("OriginalSize")
+            local originalColor = part:FindFirstChild("OriginalColor")
 
--- Funktion zum Umschalten der Sichtbarkeit der Hitboxen (Debugging-Zwecke)
-local function toggleHitboxVisibility()
-    local visibilityState = false
-
-    return function()
-        visibilityState = not visibilityState
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character then
-                local character = player.Character
-                local hitboxParts = {"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso"}
-
-                for _, partName in ipairs(hitboxParts) do
-                    local part = character:FindFirstChild(partName)
-                    if part and part:IsA("BasePart") then
-                        part.Transparency = visibilityState and 0.5 or 1  -- 0.5, wenn sichtbar (für Debugging), ansonsten 1 (unsichtbar)
-                    end
-                end
+            if originalSize then
+                part.Size = originalSize.Value
             end
+
+            if originalColor then
+                part.BrickColor = originalColor.Value
+            end
+
+            part.Transparency = 0  -- Stelle die Transparenz wieder her
+            part.CanCollide = true
         end
     end
 end
 
--- function toggleUI()
---     if isUIVisible then
---         ScreenGui.Visible = ScreenGui.Enabled == false
---     else
---         ScreenGui.Visible = ScreenGui.Visible == true
---     end
---     isUIVisible = not isUIVisible
--- end
+-- Beispiel zum Rücksetzen der Hitbox (z.B. wenn der Spieler verlässt)
+Players.PlayerRemoving:Connect(function(player)
+    resetPlayerHitbox(player)
+end)
 
 function toggleUI()
     if ScreenGui then
-        ScreenGui.Enabled = not ScreenGui.Enabled  -- Toggle UI visibility
+        ScreenGui.Enabled = not ScreenGui.Enabled
         isUIVisible = ScreenGui.Enabled
     end
 end
 -----------------------------UNLIMITED AMMO---------------------------
-local function autoReloadTool(tool)
-    -- Sicherstellen, dass das Tool existiert und ein gültiges Tool ist
+local function startAutoReload(tool)
     if not tool or not tool:IsA("Tool") then
         return
     end
 
-    -- Sicherstellen, dass das Tool in der Whitelist ist
     if not table.find(allowedWeapons, tool.Name) then
         return
     end
 
-    -- Permanente Überwachung der Munition in einem separaten Thread
     task.spawn(function()
-        while true do
-            if tool and tool.Parent == LocalPlayer.Character then
-                local currentAmmo = tool:FindFirstChild("CurrentAmmo")
-                local ammoReserves = tool:FindFirstChild("AmmoReserves")
+        while unlimitedAmmo and tool and tool.Parent == LocalPlayer.Character do
+            -- Sende jede Sekunde eine Reload-Anfrage, unabhängig vom aktuellen Munitionsstand
+            game:GetService("ReplicatedStorage").WeaponsSystem.Network.WeaponReloadRequest:FireServer(tool)
+            print("Reload Request gesendet für Waffe: " .. tool.Name)
 
-                -- Überprüfen, ob die Munition niedrig ist und ein Reload durchgeführt werden sollte
-                if currentAmmo and currentAmmo.Value <= 10 then
-                    -- Reload-Request an den Server senden
-                    local args = {
-                        [1] = tool
-                    }
-                    game:GetService("ReplicatedStorage").WeaponsSystem.Network.WeaponReloadRequest:FireServer(unpack(args))
-                    print("Reload Request gesendet für Waffe: " .. tool.Name)
+            -- Setze die Munition auf einen sehr hohen Wert, damit die Spieler lokal immer genug Munition haben
+            local currentAmmo = tool:FindFirstChild("CurrentAmmo")
+            local ammoReserves = tool:FindFirstChild("AmmoReserves")
 
-                    -- Setze Munition auf hohe Werte clientseitig für schnelleres Feedback
-                    currentAmmo.Value = 100000 -- Setze Munition auf extrem hohen Wert
-                    if ammoReserves then
-                        ammoReserves.Value = 999999 -- Setze die Reserves ebenfalls auf hohen Wert
-                    end
-                end
+            if currentAmmo then
+                currentAmmo.Value = 100000
             end
-            -- Sehr kurze Pause zwischen den Überprüfungen, um die Performance nicht zu beeinträchtigen
-            task.wait(0.1)
+            if ammoReserves then
+                ammoReserves.Value = 999999
+            end
+
+            task.wait(0.7) -- Sende jede Sekunde die Reload-Anfrage
         end
     end)
 end
 
--- Überwachung des Charakters des Spielers und Verwalten der Tools
+
 LocalPlayer.CharacterAdded:Connect(function(character)
     character.ChildAdded:Connect(function(child)
         if child:IsA("Tool") then
-            autoReloadTool(child)
+            startAutoReload(child)
         end
     end)
 
-    -- Eventuell existierende Tools direkt nach Character Spawn überwachen
     for _, tool in ipairs(character:GetChildren()) do
         if tool:IsA("Tool") then
-            autoReloadTool(tool)
+            startAutoReload(tool)
         end
     end
 end)
 
--- Überwachung des Backpacks des Spielers, falls Waffen dort abgelegt werden
 LocalPlayer.Backpack.ChildAdded:Connect(function(child)
     if child:IsA("Tool") then
-        autoReloadTool(child)
+        startAutoReload(child)
     end
 end)
 
--- Falls der Character des Spielers bereits existiert, direkt die Tools überwachen
 if LocalPlayer.Character then
     for _, tool in ipairs(LocalPlayer.Character:GetChildren()) do
         if tool:IsA("Tool") then
-            autoReloadTool(tool)
+            startAutoReload(tool)
         end
     end
 end
---Trigger
-UnlimitedAmmoButton.MouseButton1Click:Connect(autoReloadTool)
+
+UnlimitedAmmoButton.MouseButton1Click:Connect(function()
+    unlimitedAmmo = not unlimitedAmmo
+    if unlimitedAmmo then
+        UnlimitedAmmoButton.Text = "Unlimited Ammo: ON"
+        if LocalPlayer.Character then
+            for _, tool in ipairs(LocalPlayer.Character:GetChildren()) do
+                if tool:IsA("Tool") then
+                    startAutoReload(tool)
+                end
+            end
+        end
+    else
+        UnlimitedAmmoButton.Text = "Unlimited Ammo: OFF"
+    end
+end)
+
+LocalPlayer.Backpack.ChildAdded:Connect(function(child)
+    if child:IsA("Tool") then
+        startAutoReload(child)
+    end
+end)
 
 ------------------------------------------------GODMODE
-local function enableGodMode()
-    if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("Humanoid") then
-        warn("GodMode konnte nicht aktiviert werden, da der Charakter oder der Humanoid fehlt.")
-        return
-    end
-
-    local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
-
-    -- Wechsel des Status von God Mode
-    godModeEnabled = not godModeEnabled
-
-    if godModeEnabled then
-        print("God Mode aktiviert")
-        humanoid.Health = humanoid.MaxHealth
-        humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-            if godModeEnabled then
-                humanoid.Health = humanoid.MaxHealth  -- Setzt die Gesundheit auf Maximum, wenn sie sich ändert
-            end
-        end)
-
-        -- Optional: Füge einen Label an, der dem Spieler sagt, dass der God Mode aktiv ist
-        createmessage("God Mode", "God Mode ist jetzt aktiviert!")
-    else
-        print("God Mode deaktiviert")
-        -- Möglicherweise alle Signalverbindungen entfernen, falls vorhanden
-        humanoid.Health = humanoid.MaxHealth  -- Setzt die Gesundheit auf Normal zurück
-        createmessage("God Mode", "God Mode ist jetzt deaktiviert!")
-    end
-end
---Trigger
-GodModeButton.MouseButton1Click:Connect(enableGodMode)
+--SOON!
 -----------------------------------------------giveAllWeapons
 local function giveAllWeapons()
     print("-- Implementierung wird später hinzugefügt")
 end
---Trigger
 GiveWeaponsButton.MouseButton1Click:Connect(giveAllWeapons)
 
 --------------------------------------------PLAYER LIST FUNCTIONS--------------------
@@ -1155,21 +1115,21 @@ local function stopSpectate()
 end
 
 local function spectatePlayer(player)
-    stopSpectate()  -- Beende einen eventuell bestehenden Spectate-Modus
+    stopSpectate()
 
     if player.Character and player.Character:FindFirstChild("Humanoid") then
         spectateTarget = player
         workspace.CurrentCamera.CameraSubject = player.Character.Humanoid
 
         spectateConnection = player.CharacterRemoving:Connect(function()
-            stopSpectate()  -- Beende das Beobachten, wenn der Spielercharakter entfernt wird
+            stopSpectate()
         end)
     end
 end
 
 local function teleportToPlayer(player)
     if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        stopSpectate()  -- Beende das Spectating, bevor teleportiert wird
+        stopSpectate()
         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
             LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
         end
@@ -1177,23 +1137,11 @@ local function teleportToPlayer(player)
 end
 
 -----------------------CREATE PLAYERLIST--------------------
-
-for _, playerFrame in ipairs(PlayersList:GetChildren()) do
-    if playerFrame:IsA("Frame") then
-        playerFrame.ZIndex = 6
-        local spectateButton = playerFrame:FindFirstChild("SpectateButton")
-        local teleportButton = playerFrame:FindFirstChild("TeleportButton")
-        if spectateButton then
-            spectateButton.ZIndex = 7
-        end
-        if teleportButton then
-            teleportButton.ZIndex = 7
-        end
-    end
+while not LocalPlayer do
+    task.wait()
 end
-
 local function updatePlayerList()
-    -- Alle bestehenden Spieler-Einträge entfernen
+    print("Playerlist geupdatet!")
     for _, child in ipairs(PlayersList:GetChildren()) do
         if child:IsA("Frame") then
             child:Destroy()
@@ -1202,7 +1150,6 @@ local function updatePlayerList()
 
     local yOffset = 10
 
-    -- Für jeden Spieler eine neue Zeile erstellen
     for _, player in ipairs(Players:GetPlayers()) do
         if player ~= LocalPlayer then
             local PlayerFrame = Instance.new("Frame")
@@ -1212,12 +1159,10 @@ local function updatePlayerList()
             PlayerFrame.BorderSizePixel = 0
             PlayerFrame.Parent = PlayersList
 
-            -- Abrundung für PlayerFrame
             local playerFrameCorner = Instance.new("UICorner")
             playerFrameCorner.CornerRadius = UDim.new(0, 8)
             playerFrameCorner.Parent = PlayerFrame
 
-            -- Schatten für den PlayerFrame - Größe reduzieren für subtileres Aussehen
             local shadow = Instance.new("Frame")
             shadow.Size = PlayerFrame.Size + UDim2.new(0, 5, 0, 5)
             shadow.Position = PlayerFrame.Position + UDim2.new(0, 3, 0, 3)
@@ -1227,7 +1172,6 @@ local function updatePlayerList()
             shadow.ZIndex = 0
             shadow.Parent = PlayerFrame
 
-            -- Spielername Label
             local PlayerLabel = Instance.new("TextLabel")
             PlayerLabel.Size = UDim2.new(0.4, 0, 1, 0)
             PlayerLabel.Position = UDim2.new(0.05, 0, 0, 0)
@@ -1238,7 +1182,6 @@ local function updatePlayerList()
             PlayerLabel.TextSize = 18
             PlayerLabel.Parent = PlayerFrame
 
-            -- Team Label
             local TeamLabel = Instance.new("TextLabel")
             TeamLabel.Size = UDim2.new(0.25, 0, 1, 0)
             TeamLabel.Position = UDim2.new(0.45, 0, 0, 0)
@@ -1249,7 +1192,6 @@ local function updatePlayerList()
             TeamLabel.TextSize = 16
             TeamLabel.Parent = PlayerFrame
 
-            -- Spectate Button
             local SpectateButton = Instance.new("TextButton")
             SpectateButton.Size = UDim2.new(0.15, -5, 0.8, 0)
             SpectateButton.Position = UDim2.new(0.7, 5, 0.1, 0)
@@ -1260,12 +1202,10 @@ local function updatePlayerList()
             SpectateButton.TextSize = 16
             SpectateButton.Parent = PlayerFrame
 
-            -- Button Abrundung für den Spectate Button
             local spectateButtonCorner = Instance.new("UICorner")
             spectateButtonCorner.CornerRadius = UDim.new(0, 5)
             spectateButtonCorner.Parent = SpectateButton
 
-            -- Teleport Button
             local TeleportButton = Instance.new("TextButton")
             TeleportButton.Size = UDim2.new(0.15, -5, 0.8, 0)
             TeleportButton.Position = UDim2.new(0.85, 5, 0.1, 0)
@@ -1276,12 +1216,10 @@ local function updatePlayerList()
             TeleportButton.TextSize = 16
             TeleportButton.Parent = PlayerFrame
 
-            -- Button Abrundung für den Teleport Button
             local teleportButtonCorner = Instance.new("UICorner")
             teleportButtonCorner.CornerRadius = UDim.new(0, 5)
             teleportButtonCorner.Parent = TeleportButton
 
-            -- Hover Effekt für Buttons
             local function addHoverEffect(button)
                 button.MouseEnter:Connect(function()
                     button.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
@@ -1298,7 +1236,6 @@ local function updatePlayerList()
             addHoverEffect(SpectateButton)
             addHoverEffect(TeleportButton)
 
-            -- Button Funktionen
             SpectateButton.MouseButton1Click:Connect(function()
                 spectatePlayer(player)
             end)
@@ -1307,19 +1244,17 @@ local function updatePlayerList()
                 teleportToPlayer(player)
             end)
 
-            -- Abstand zum nächsten Spieler-Eintrag
             yOffset = yOffset + 70
         end
     end
 
-    -- Passe die CanvasSize dynamisch an die Anzahl der Spieler an
     PlayersList.CanvasSize = UDim2.new(0, 0, 0, yOffset)
 end
 
 -------------------Repeaters-------------
 while true do
     updatePlayerList()
-    wait(2) -- Aktualisiert die Liste alle 2 Sekunden
+    wait(2)
 end
 
 --Changers
@@ -1343,40 +1278,31 @@ local toggleVisibility = toggleHitboxVisibility()
 
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
-    -- GodMode ein/aus
-    if input.KeyCode == Enum.KeyCode[Settings.ToggleGodMode] then
-        enableGodMode()
-    end
 
-    -- Unendlich Munition ein/aus
     if input.KeyCode == Enum.KeyCode[Settings.ToggleUnlimitedAmmo] then
-        autoReloadTool()  -- Eine Funktion, die unendliche Munition aktiviert
+        autoReloadTool()
     end
 
-    -- Fluggeschwindigkeit erhöhen
     if input.KeyCode == Enum.KeyCode[Settings.IncreaseFlySpeed] then
-        FlySpeed = math.min(FlySpeed + 10, 400)  -- Erhöht die Geschwindigkeit, max. 400
+        FlySpeed = math.min(FlySpeed + 10, 400)
         print("Fluggeschwindigkeit erhöht auf:", FlySpeed)
     end
 
-    -- Fluggeschwindigkeit verringern
     if input.KeyCode == Enum.KeyCode[Settings.DecreaseFlySpeed] then
-        FlySpeed = math.max(FlySpeed - 10, 5)  -- Verringert die Geschwindigkeit, mind. 5
+        FlySpeed = math.max(FlySpeed - 10, 5)
         print("Fluggeschwindigkeit verringert auf:", FlySpeed)
     end
 
-    -- Beobachten eines Spielers
     if input.KeyCode == Enum.KeyCode[Settings.SpectatePlayer] then
         if spectateTarget then
             stopSpectate()
         else
-            spectatePlayer(Players:GetPlayers()[2])  -- Beispiel: Beobachte den zweiten Spieler in der Liste
+            spectatePlayer(Players:GetPlayers()[2])
         end
     end
 
-    -- Teleportiere zu einem Spieler
     if input.KeyCode == Enum.KeyCode[Settings.TeleportToPlayer] then
-        teleportToPlayer(Players:GetPlayers()[2])  -- Beispiel: Teleportiere zum zweiten Spieler in der Liste
+        teleportToPlayer(Players:GetPlayers()[2])
     end
 end)
 
@@ -1391,7 +1317,20 @@ for _, child in ipairs(PlayersList:GetChildren()) do
     end
 end
 
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
+task.defer(updatePlayerList)
 
-updatePlayerList()
+task.spawn(function()
+    while true do
+        updatePlayerList()
+        task.wait(2)
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function(character)
+            task.wait(1)
+            updatePlayerList()
+        end)
+    end
+end
